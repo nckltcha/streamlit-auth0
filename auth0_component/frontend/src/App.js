@@ -34,7 +34,7 @@ class App extends StreamlitComponentBase {
     redirectUri: window.location.origin,
   };
 
-  onRun = (user) => { 
+  onRun = (user) => {
     if (! _.isEqual(user, this.state.user)){        
           if (! user){
             Streamlit.setComponentValue(user)
