@@ -6,13 +6,16 @@ import "./NavBar.css"
 import {
   Container,
   Button,
+
 } from "reactstrap"
+
 
 
 // eslint-disable-next-line
 import { useAuth0 } from "@auth0/auth0-react"
 
-const NavBar = (props) => {
+class NavBar extends React.Component {
+
 
   const onRun = props["props"]["onRun"]
   const domain = props["props"]["domain"]
@@ -28,10 +31,26 @@ const NavBar = (props) => {
     getAccessTokenWithPopup,
   } = useAuth0()
 
-  const logoutWithRedirect = () =>
-    logout({
+
+  // eslint-disable-next-line
+  // const {
+  //   user,
+  //   isAuthenticated,
+  //   loginWithRedirect,
+  //   loginWithPopup,
+  //   logout,
+  //   getAccessTokenSilently,
+  //   getAccessTokenWithPopup
+  // } = useAuth0();
+  //
+  logoutWithRedirect = () =>
+    this.state.logout({
       returnTo: window.location.origin,
     })
+
+  getAccessToken = () => {
+    if (this.state.authToken)
+      return this.state.authToken
 
 
 
@@ -70,17 +89,35 @@ const NavBar = (props) => {
   }, )
 
 
-  return (
-    <div className="nav-container">
+  render() {
+    if (this.state.isAuthenticated) {
+
+      // essentially doing user["token"] = this.state.getAccessToken
+      this.setState({
+        user: {
+          ...this.state.user,
+          token: this.getAccessToken(),
+        },
+      })
+
+      this.props.onRun(this.state.user)
+    } else {
+      this.props.onRun(false)
+    }
+    return <div className="nav-container">
       <Container className="login-component">
+
         {!isAuthenticated && (
+
           <Button
             color="primary"
             className="btn-margin"
             onClick={() => {
+
               loginWithPopup({}).then(() => {
                 onRun(false, null)
               }).catch((err) => console.log(err))
+
             }}
           >
             Log in
@@ -90,13 +127,16 @@ const NavBar = (props) => {
           <Button
             onClick={() => {
               logoutWithRedirect()
+
             }}
           >Logout
           </Button>
         )}
       </Container>
     </div>
+
   )
+
 }
 
 export default NavBar
