@@ -11,6 +11,11 @@
   margin-bottom: 0;
 }
 
+.login-component {
+    height: 50px;
+    margin-left: 0px; !important
+}
+
 .next-steps .col-md-5 {
   margin-bottom: 3rem;
 }
